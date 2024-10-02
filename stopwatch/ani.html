@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0%;
+        }
+        body{
+            height: 100vh;
+            background-image: url("https://media.istockphoto.com/id/1185382671/vector/abstract-blurred-colorful-background.jpg?s=612x612&w=0&k=20&c=3YwJa7lCw-cQ-hviINULUokL9lYU4RuGjMP_E_0N8E4=");
+            background-repeat: no-repeat;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #dis{
+                background: linear-gradient(90deg, hsla(276, 95%, 87%, 0.3),hsla(32, 64%, 82%, 0.3));
+                box-shadow: 2px 2px 5px whitesmoke;
+        }
+        #head{
+            text-shadow: 2px 2px 5px blanchedalmond;
+        }
+        button{
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 20px;
+            background-color: aquamarine;
+        }
+        button:hover{
+            background-color: hsl(160, 100%, 65%);
+
+        }
+    </style>
+</head>
+<body>
+    <h1 id="head">STOP WATCH</h1>
+    <h1 id="dis">00:00:00:00</h1>
+    <div>
+    <button onclick="start()">start</button>
+    <button onclick="stop()">stop</button>
+    <button onclick="reset()">reset</button>
+    </div>
+
+    <script>    
+        t=0
+        flag=true
+        const dis=document.getElementById("dis")
+        function start(){
+            if(flag){
+            timer=setInterval(upadate,10);
+            flag=false
+        }
+        }
+        function stop(){
+            clearInterval(timer)
+            flag=true
+        }
+        function reset(){
+            t=0
+            dis.textContent=`00:00:00:00`
+            flag=true
+
+        }
+        function upadate(){
+            t=t+10
+            h=String(Math.floor(t/(1000*60*60))).padStart(2,"0")
+            m=String(Math.floor(t/(1000*60)%60)).padStart(2,"0")
+            s=String(Math.floor(t/(1000)%60)).padStart(2,"0")
+            ms=String(Math.floor((t%1000)/10)).padStart(2,"0") 
+            dis.textContent=`${h}:${m}:${s}:${ms}`
+
+        }
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            font-family: Arial,sans-serif;
+            padding: 0px;
+            margin: 0px;
+        }
+        input{
+            padding: 10px;
+            border-radius: 20px;
+            background-color: blanchedalmond;
+            box-shadow: 1px 2px 6px rgb(209, 158, 83) ;
+        }
+        body{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+        }
+        button{
+            border-radius: 20px;
+            border: 0px solid;
+            padding: 10px;
+            background-color: lightgreen;
+            box-shadow: 2px 2px 5px grey;
+        }
+        button:hover{
+            background-color: hsl(120, 73%, 65%);
+
+        }
+
+        .card{
+            background: linear-gradient(180deg,hsla(240, 93%, 76%, 0.575),hsla(39, 71%, 67%, 0.815));
+            padding: 20px;
+            margin: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 2px 2px 8px grey;
+            display: none;
+            transition: all 1s ease;
+        }
+        p{
+            margin: 8px;
+        }
+        .emoji{
+            font-size: 3rem;
+        }
+    </style>
+
+
+</head>
+<body>
+    <form class="form">
+    <input type="text" id="city" placeholder="enter a city name">
+    <button type="submit" class="button">Get Weather</button>
+    </form>
+
+    <div class="card">
+        <!-- <h1 class="city">Tokiyo</h1>
+        <p class="temp">90*</p>
+        <p class="humi">Humidity: 75%</p>
+        <p class="sky">Clear Sky</p>
+        <p class="emoji">☀️</p>
+        <p class="error">please enter valid city</p> -->
+
+    </div>
+
+    <script>
+        const api="5cef12eb61417faab8d2179a03857795";
+        const form=document.querySelector(".form");
+        const input=document.getElementById("city");
+        const card=document.querySelector (".card");
+        form.addEventListener("submit",async event=>{
+            event.preventDefault();
+            cityname=input.value;
+            console.log(cityname);
+            
+            if(cityname){
+                await fetchdata(cityname);
+            }
+            else{
+                console.error("enter the city name")
+            }
+        })
+
+
+        async function fetchdata(cityname) {
+            const apiurl=`https://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=${api}`
+            const Response= await fetch(apiurl);
+            console.log(Response);      
+            const data=await Response.json();
+            displaydata(data);      
+        }
+
+        function displaydata(data){
+            console.log(data)
+            const {name:city , 
+                    main:{temp,humidity},
+                    weather:[{description, id  }]}=data;
+            const cn=document.createElement("h1");
+            const t=document.createElement("p");
+            const h=document.createElement("p");
+            const s=document.createElement("p");
+            const e=document.createElement("p");
+            console.log("reached");
+            
+            cn.textContent=city;
+            t.textContent=`${((temp-273)*(9/5)+32).toFixed(1)}° F`;
+            h.textContent=`Humidity : ${humidity}`;
+            s.textContent=description;
+            e.textContent=`${getEmoji(id)}`
+            e.classList.add(".emoji");
+            card.textContent=``
+            card.appendChild(cn);
+            card.appendChild(t);
+            card.appendChild(h);
+            card.appendChild(s);
+            card.appendChild(e);
+
+            card.style.display="block"
+        }
+
+        function getEmoji(id){
+            switch(true){
+                case(id>=200 && id<300):
+                return `⛈️`
+                case(id>=300 && id<400):
+                return `☔`
+                case(id>=400 && id<500):
+                return `🌧️`
+                case(id>=500 && id<600):
+                return `❄️`
+                case(id>=600 && id<700):
+                return `🍃`
+                case(id>=800 && id<900):
+                return `☀️`
+            }
+        }
+    </script>
+
+
+</body>
+</html>
